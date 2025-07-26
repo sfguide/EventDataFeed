@@ -8,6 +8,10 @@ CORS(app)
 EVENTBRITE_TOKEN = os.environ.get('EVENTBRITE_TOKEN')
 ORGANIZER_ID = os.environ.get('EVENTBRITE_ORG_ID')
 
+@app.route("/test")
+def test():
+    return jsonify({"message": "This is the /test route."})
+
 @app.route("/")
 def home():
     return "Eventbrite Proxy is running!"
