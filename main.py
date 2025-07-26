@@ -9,6 +9,10 @@ CORS(app)  # Enable cross-origin requests
 EVENTBRITE_TOKEN = os.environ.get('EVENTBRITE_TOKEN')
 ORGANIZER_ID = os.environ.get('EVENTBRITE_ORG_ID')  # Optional
 
+@app.route('/debug')
+def debug():
+    return "Debug route: this proxy app is active."
+
 @app.route("/")
 def home():
     return "Eventbrite Proxy is running!"
