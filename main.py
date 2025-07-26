@@ -22,13 +22,24 @@ def debug():
 
 @app.route("/events")
 def get_events():
+    print(">>> /events route was hit")
     if not EVENTBRITE_TOKEN:
+        print(">>> Missing EVENTBRITE_TOKEN")
         return jsonify({"error": "Missing EVENTBRITE_TOKEN"}), 500
+
     headers = {"Authorization": f"Bearer {EVENTBRITE_TOKEN}"}
     params = {"expand": "venue"}
+
     if ORGANIZER_ID:
         params["organizer.id"] = ORGANIZER_ID
-    resp = requests.get("https://www.eventbriteapi.com/v3/events/search/", headers=headers, params=params)
-    if resp.ok:
-        return jsonify(resp.json())
-    return jsonify({"error": resp.text}), resp.status_code
+
+    try:
+        response = requests.get("https://www.eventbriteapi.com/v3/events/search/", headers=headers, params=params)
+        print(">>> Eventbrite API call status:", response.status_code)
+        if response.ok:
+            return jsonify(response.json())
+        else:
+            return jsonify({"error": response.text}), response.status_code
+    except Exception as e:
+        print(">>> Exception:", e)
+        return jsonify({"error": str(e)}), 500
